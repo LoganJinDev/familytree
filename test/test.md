@@ -8,14 +8,12 @@
 
    克隆项目仓库：
 
-   ```
-   bash
-   
-   
-   复制编辑
-   git clone https://github.com/qiaoshouqing/familytree.git
-   cd familytree
-   ```
+```
+bash
+
+git clone https://github.com/qiaoshouqing/familytree.git
+cd familytree
+```
 
 
 
@@ -28,34 +26,32 @@
 ```
 Docker
 
+# 使用官方 Node.js 镜像作为基础镜像
+FROM node:18-alpine
 
-复制编辑
-   # 使用官方 Node.js 镜像作为基础镜像
-   FROM node:18-alpine
+# 设置工作目录
+WORKDIR /app
 
-   # 设置工作目录
-   WORKDIR /app
+# 复制 package.json 和 pnpm-lock.yaml
+COPY package.json pnpm-lock.yaml ./
 
-   # 复制 package.json 和 pnpm-lock.yaml
-   COPY package.json pnpm-lock.yaml ./
+# 安装 pnpm
+RUN npm install -g pnpm
 
-   # 安装 pnpm
-   RUN npm install -g pnpm
+# 安装项目依赖
+RUN pnpm install
 
-   # 安装项目依赖
-   RUN pnpm install
+# 复制项目源代码
+COPY . .
 
-   # 复制项目源代码
-   COPY . .
+# 构建项目
+RUN pnpm build
 
-   # 构建项目
-   RUN pnpm build
+# 暴露应用运行的端口
+EXPOSE 3000
 
-   # 暴露应用运行的端口
-   EXPOSE 3000
-
-   # 启动应用
-   CMD ["pnpm", "start"]
+# 启动应用
+CMD ["pnpm", "start"]
 ```
 
 
@@ -69,18 +65,16 @@ Docker
 ```
 yaml
 
-
-复制编辑
-   version: '3.8'
-   services:
-     familytree:
-       build: .
-       ports:
-         - "3000:3000"
-       environment:
-         - NODE_ENV=production
-       volumes:
-         - .:/app
+version: '3.8'
+services:
+ familytree:
+   build: .
+   ports:
+     - "3000:3000"
+   environment:
+     - NODE_ENV=production
+   volumes:
+     - .:/app
 ```
 
 
@@ -103,29 +97,29 @@ yaml
 
 1. **构建镜像**
 
-   如果使用 Dockerfile：
+如果使用 Dockerfile：
 
-   ```
-   bash
-   
-   
-   复制编辑
-   docker build -t familytree .
-   ```
+```
+bash
+
+
+复制编辑
+docker build -t familytree .
+```
 
 
 
 1. **启动容器**
 
-   如果使用 Docker Compose：
+如果使用 Docker Compose：
 
-   ```
-   bash
-   
-   
-   复制编辑
-   docker-compose up
-   ```
+```
+bash
+
+
+复制编辑
+docker-compose up
+```
 
 
 
